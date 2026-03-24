@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\ChatController;
 | HomeController Routes 
 |--------------------------------------------------------------------------
 */
+Route::get('lawyers/{id}', [HomeController::class, 'getLawyerDetails']);
 // روت القضايا (بيدعم سيرش وفلتر كـ Query Params)
 Route::get('/home/cases', [HomeController::class, 'getAvailableCases']);
 // روت المحامين الأعلى تقييماً
