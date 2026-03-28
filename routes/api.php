@@ -68,6 +68,7 @@ Route::post('/profile/update', [AuthController::class, 'updateProfile']);
     |-- مسارات الأدمن والموظفين (الإدارة) --
     */
     Route::prefix('admin')->group(function () {
+        Route::post('/tickets/{id}/update-status', [SupportTicketController::class, 'updateStatus']);
             Route::get('support/tickets',            [SupportTicketController::class, 'index']);           // كل التذاكر + فلتر (للأدمن)
     Route::get('support/tickets/{id}',       [SupportTicketController::class, 'show']);            // تذكرة واحدة
         Route::get('/users', [DashboardController::class, 'getAllUsers']);
