@@ -98,6 +98,12 @@ public function getTopProviders(Request $request)
         ->where('is_active', true)
         ->with(['providerProfile'])
         ->withCount('reviewsReceived')
+            ->withCount([
+            'acceptedCases as completed_cases_count' => function ($q) {
+                $q->where('status', 'completed');
+            }
+        ])
+
         ->paginate($perPage);
 
     // ترتيب حسب average_rating بعد جلب الـ collection

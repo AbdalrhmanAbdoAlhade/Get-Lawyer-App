@@ -6,6 +6,8 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Models\LegalCase;
+
 
 class User extends Authenticatable
 {
@@ -48,7 +50,7 @@ class User extends Authenticatable
     {
         return $this->profile_image 
             ? asset('storage/' . $this->profile_image) 
-            : asset('images/default-avatar.png'); 
+            : null; 
     }
 
     // تقييم المحامي
@@ -80,6 +82,11 @@ class User extends Authenticatable
         return $this->hasMany(Offer::class, 'provider_id');
     }
     
+        public function acceptedCases()
+    {
+        return $this->hasMany(LegalCase::class, 'accepted_provider_id');
+    }
+        
     public function reviewsReceived()
     {
         return $this->hasMany(Review::class, 'provider_id');

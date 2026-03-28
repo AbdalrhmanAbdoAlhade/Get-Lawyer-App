@@ -82,6 +82,47 @@ class SupportTicketController extends Controller
             ], 500);
         }
     }
+    //تحديث التذكره admin 
+    public function updateStatus(Request $request, $id)
+{
+    // admin بس
+    if (auth()->user()->role !== 'admin') {
+        return response()->json([
+            'status' => false,
+            'message' => 'Unauthorized'
+        ], 403);
+    }
+
+    $request->validate([
+        'status' => 'required|in:pending,in_progress,resolved,closed',
+        'note' => 'nullable|string'
+    ], [
+        'status.required' => 'الحالة مطلوبة',
+        'status.in' => 'الحالة غير صحيحة',
+    ]);
+
+    try {
+        $ticket = SupportTicket::findOrFail($id);
+
+        $ticket->update([
+            'status' => $request->status,
+            'admin_note' => $request->admin_note,
+        ]);
+
+        return response()->json([
+            'status'  => true,
+            'message' => 'تم تحديث حالة التذكرة بنجاح',
+            'data'    => $ticket
+        ]);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'status'  => false,
+            'message' => 'حدث خطأ',
+            'error'   => $e->getMessage()
+        ], 500);
+    }
+}
 
     // تذاكر المستخدم الحالي
     public function myTickets()

@@ -178,33 +178,30 @@ public function getStats()
     /**
      * 4. جلب القضايا التي تم قبول عرض المحامي فيها
      */
-    public function myAcceptedOffers(Request $request)
-    {
-        $user = auth()->user();
+  public function myAcceptedOffers(Request $request)
+{
+    $user = auth()->user();
 
-        $cases = LegalCase::whereHas('offers', function($q) use ($user) {
-            $q->where('provider_id', $user->id)
-              ->where('status', 'accepted'); 
-        })
+    $cases = LegalCase::where('accepted_provider_id', $user->id)
+        ->whereIn('status', ['processing'])
         ->with([
             'client' => function($q) {
                 $q->select('id', 'name', 'profile_image');
             },
             'offers' => function($q) use ($user) {
-                // جلب العرض المقبول فقط
-                $q->where('provider_id', $user->id)
-                  ->where('status', 'accepted');
+                // نجيب عرض المحامي فقط
+                $q->where('provider_id', $user->id);
             }
         ])
         ->withCount('offers')
         ->latest()
         ->get();
 
-        return response()->json([
-            'status' => true,
-            'data' => $cases
-        ]);
-    }
+    return response()->json([
+        'status' => true,
+        'data' => $cases
+    ]);
+}
 /**
  * 5. عرض تفاصيل قضية بعينها
  */

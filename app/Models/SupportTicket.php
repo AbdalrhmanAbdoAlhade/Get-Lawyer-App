@@ -14,6 +14,7 @@ class SupportTicket extends Model
         'title',
         'description',
         'status',
+        'note'
     ];
 
     public static array $problemTypes = [
